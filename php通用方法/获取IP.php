@@ -1,22 +1,22 @@
 <?php
 
-    //获取IP
-    public static function getIP()
-    {
-        if(!empty($_SERVER["HTTP_CDN_SRC_IP"])){
-            $ip = $_SERVER["HTTP_CDN_SRC_IP"];
+    /**
+     * 获取客户端ip，包括CDN
+     * @return string
+     */
+    public static function getClientIP() {
+        $ip = isset($_SERVER["HTTP_CDN_SRC_IP"])? $_SERVER["HTTP_CDN_SRC_IP"]:'';
+        if(empty($ip)){
+            $ip = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : '';
         }
-        else if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown"))
-            $ip = getenv("HTTP_CLIENT_IP");
-        else if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown"))
-            $ip = getenv("HTTP_X_FORWARDED_FOR");
-        else if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown"))
-            $ip = getenv("REMOTE_ADDR");
-        else if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown"))
-            $ip = $_SERVER['REMOTE_ADDR'];
-        else
-            $ip = "unknown";
-        return($ip);
+        if(empty($ip)) {
+            $ip = isset($_SERVER["HTTP_CLIENT_IP"]) ? $_SERVER["HTTP_CLIENT_IP"] : '';
+        }
+
+        if(empty($ip)) {
+            $ip = isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : '';
+        }
+        return $ip;
     }
 
 ?>
